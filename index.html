@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerardo Aleman - Designer & Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1a1a1a;
+            --accent-color: #ff6b35;
+            --text-light: #ffffff;
+            --text-dark: #1a1a1a;
+            --bg-light: #f5f5f5;
+            --transition-smooth: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease, background 0.2s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s ease;
+        }
+
+        .cursor.hover {
+            transform: scale(1.5);
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, -50px) rotate(180deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 0.7; }
+        }
+
+        .scroll-indicator span {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scroll-indicator .mouse {
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--text-light);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .scroll-indicator .mouse::before {
+            content: '';
+            width: 4px;
+            height: 10px;
+            background: var(--text-light);
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            animation: scrollDown 2s ease infinite;
+        }
+
+        @keyframes scrollDown {
+            0%, 100% { opacity: 0; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Horizontal Scroll Section */
+        .horizontal-scroll-wrapper {
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .horizontal-scroll {
+            display: flex;
+            height: 100vh;
+            will-change: transform;
+        }
+
+        .project-slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            padding: 2rem;
+        }
+
+        .project-slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .project-content {
+            z-index: 2;
+            color: var(--text-light);
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition-smooth);
+        }
+
+        .project-slide.active .project-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-content h2 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .project-content .tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--text-light);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Work Section */
+        .work-section {
+            padding: 8rem 4vw;
+            background: var(--text-light);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 4rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition-smooth);
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .work-card {
+            background: var(--bg-light);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .work-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .work-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .work-card-image {
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-card:nth-child(2) .work-card-image {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .work-card:nth-child(3) .work-card-image {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .work-card-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .work-card:hover .work-card-image::before {
+            background: rgba(0, 0, 0, 0);
+        }
+
+        .work-card-content {
+            padding: 2rem;
+        }
+
+        .work-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .work-card p {
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .work-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .work-stats li {
+            list-style: none;
+        }
+
+        .work-stats strong {
+            color: var(--accent-color);
+        }
+
+        /* Creative Section */
+        .creative-section {
+            padding: 8rem 4vw;
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .creative-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 4rem auto 0;
+        }
+
+        .creative-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(255,107,53,0.3) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .creative-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .creative-item:hover {
+            background: linear-gradient(135deg, rgba(255,107,53,0.3) 0%, rgba(255,107,53,0.5) 100%);
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 8rem 4vw;
+            background: var(--text-light);
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+        .contact-section p {
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--accent-color);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition-smooth);
+            border: 2px solid var(--accent-color);
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        /* Parallax Elements */
+        .parallax-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        .parallax-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--accent-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cursor, .cursor-follower {
+                display: none;
+            }
+
+            .work-grid, .creative-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursors -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Parallax Background -->
+    <div class="parallax-bg" id="parallaxBg"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Gerardo Aleman</h1>
+            <p class="subtitle">Designer & Engineer based in South Pasadena, California</p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- Horizontal Scroll Projects -->
+    <div class="horizontal-scroll-wrapper" id="horizontalWrapper">
+        <div class="horizontal-scroll" id="horizontalScroll">
+            <div class="project-slide active" style="background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="project-content">
+                    <span class="tag">Launch</span>
+                    <h2>PEL-1</h2>
+                    <p>High resolution earth imaging platform at Planet Labs</p>
+                </div>
+            </div>
+            <div class="project-slide" style="background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="project-content">
+                    <span class="tag">Launch</span>
+                    <h2>TAN-1</h2>
+                    <p>Hyper-spectral satellite engineering</p>
+                </div>
+            </div>
+            <div class="project-slide" style="background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="project-content">
+                    <span class="tag">Qualification</span>
+                    <h2>Haven-1</h2>
+                    <p>Commercial space station structural design</p>
+                </div>
+            </div>
+            <div class="project-slide" style="background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="project-content">
+                    <span class="tag">Flight</span>
+                    <h2>P-727</h2>
+                    <p>Classified airframe design at Skunk Works</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Work Section -->
+    <section class="work-section">
+        <h2 class="section-title">Recent Work</h2>
+        <div class="work-grid">
+            <div class="work-card">
+                <div class="work-card-image"></div>
+                <div class="work-card-content">
+                    <h3>Skunk Works</h3>
+                    <p>Airframe Design Engineer on classified P-727 project. Designed and released structural components for extreme environments using advanced materials (Inconel/Haynes230).</p>
+                    <ul class="work-stats">
+                        <li><strong>25+</strong> Parts designed (CATIA)</li>
+                        <li><strong>25+</strong> Assemblies released</li>
+                        <li><strong>5+</strong> Supplier interfaces</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-card-image"></div>
+                <div class="work-card-content">
+                    <h3>Planet Labs</h3>
+                    <p>Mechanical Design Engineer for Pelican-1 & Tanager-1 satellites. Full lifecycle design from prototyping to launch-ready spacecraft assembly.</p>
+                    <ul class="work-stats">
+                        <li><strong>25+</strong> Parts designed (SOLIDWORKS)</li>
+                        <li><strong>5+</strong> FEA models (FEMAP)</li>
+                        <li><strong>2</strong> Satellites launched</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-card-image"></div>
+                <div class="work-card-content">
+                    <h3>Vast Space</h3>
+                    <p>Responsible engineer for COPV mounting solutions on Haven-1 commercial space station. Led structural validation and qualification testing.</p>
+                    <ul class="work-stats">
+                        <li><strong>50+</strong> Parts designed (NX)</li>
+                        <li><strong>10+</strong> FEA models (ANSYS)</li>
+                        <li><strong>2025</strong> Launch target</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creative Section -->
+    <section class="creative-section">
+        <h2 class="section-title">Creative Projects</h2>
+        <p style="text-align: center; font-size: 1.2rem; opacity: 0.8; max-width: 800px; margin: 0 auto 4rem;">
+            Beyond engineering, creative design projects inspire me every day—from graphic design and sculpting to woodworking, camper van conversions, music, fashion, and outdoor gear prototyping.
+        </p>
+        <div class="creative-grid">
+            <div class="creative-item">Lighting</div>
+            <div class="creative-item">BOVE</div>
+            <div class="creative-item">Wythe</div>
+            <div class="creative-item">APPARATUS</div>
+            <div class="creative-item">Adult Blonde</div>
+            <div class="creative-item">Vanlife</div>
+            <div class="creative-item">Ask a Punk</div>
+            <div class="creative-item">Custom Bike Bag</div>
+            <div class="creative-item">Custom Nightstand</div>
+            <div class="creative-item">Design Studio</div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <h2>Let's Work Together</h2>
+        <p>We're always looking for new opportunities and are comfortable working internationally.</p>
+        <a href="mailto:hello@jjjalemanjjj.net" class="cta-button">Get In Touch</a>
+    </section>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Cursor hover effect
+        const hoverElements = document.querySelectorAll('a, button, .work-card, .creative-item, .cta-button');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Horizontal Scroll
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.project-slide');
+        const horizontalScroll = document.getElementById('horizontalScroll');
+        const wrapper = document.getElementById('horizontalWrapper');
+
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            if (e.deltaY > 0 && currentSlide < slides.length - 1) {
+                currentSlide++;
+            } else if (e.deltaY < 0 && currentSlide > 0) {
+                currentSlide--;
+            }
+            
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === currentSlide);
+            });
+            
+            horizontalScroll.style.transform = `translateX(-${currentSlide * 100}vw)`;
+        }, { passive: false });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.work-card, .creative-item, .section-title').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax Background
+        const parallaxBg = document.getElementById('parallaxBg');
+        for (let i = 0; i < 10; i++) {
+            const shape = document.createElement('div');
+            shape.className = 'parallax-shape';
+            const size = Math.random() * 300 + 100;
+            shape.style.width = size + 'px';
+            shape.style.height = size + 'px';
+            shape.style.left = Math.random() * 100 + '%';
+            shape.style.top = Math.random() * 100 + '%';
+            parallaxBg.appendChild(shape);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.parallax-shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, i) => {
+                const speed = (i + 1) * 0.05;
+                shape.style.transform = `translate(${x * 50 * speed}px, ${y * 50 * speed}px)`;
+            });
+        });
+
+        // Smooth scroll for creative items stagger
+        const creativeItems = document.querySelectorAll('.creative-item');
+        const creativeObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        creativeItems.forEach(item => creativeObserver.observe(item));
+    </script>
+</body>
+</html>
