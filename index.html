@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerardo Aleman - Designer & Engineer</title>
+    <title>Gerardo Aleman - Aerospace Engineer & Designer</title>
     <style>
         * {
             margin: 0;
@@ -12,19 +12,21 @@
         }
 
         :root {
-            --primary-color: #1a1a1a;
-            --accent-color: #ff6b35;
+            --primary: #0a0e27;
+            --accent: #00d4ff;
+            --accent-warm: #ff6b35;
             --text-light: #ffffff;
             --text-dark: #1a1a1a;
-            --bg-light: #f5f5f5;
-            --transition-smooth: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --bg-light: #f8f9fa;
+            --bg-dark: #1a1d2e;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-light);
-            color: var(--text-dark);
-            cursor: none;
+            background: var(--primary);
+            color: var(--text-light);
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
@@ -32,29 +34,59 @@
         .cursor {
             width: 20px;
             height: 20px;
-            border: 2px solid var(--accent-color);
+            border: 2px solid var(--accent);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.2s ease, background 0.2s ease;
+            transition: transform 0.15s ease;
             mix-blend-mode: difference;
         }
 
-        .cursor-follower {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: transform 0.15s ease;
+        .cursor.active {
+            transform: scale(2);
+            background: rgba(0, 212, 255, 0.1);
         }
 
-        .cursor.hover {
-            transform: scale(1.5);
-            background: rgba(255, 107, 53, 0.2);
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        nav .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+
+        nav a:hover {
+            opacity: 1;
+            color: var(--accent);
         }
 
         /* Hero Section */
@@ -63,31 +95,66 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: var(--text-light);
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
+        .hero-bg {
             position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, transparent 70%);
-            animation: float 20s ease-in-out infinite;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2332 50%, #0a0e27 100%);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-50px, -50px) rotate(180deg); }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         .hero-content {
             text-align: center;
             z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-light) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s forwards;
             opacity: 0;
-            animation: fadeInUp 1.2s ease forwards;
+        }
+
+        .hero .tagline {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
         }
 
         @keyframes fadeInUp {
@@ -101,526 +168,503 @@
             }
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-        }
-
-        .hero .subtitle {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: 300;
-            opacity: 0.9;
-            margin-bottom: 3rem;
-        }
-
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            animation: fadeIn 1s ease 1.5s forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 0.7; }
-        }
-
-        .scroll-indicator span {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .scroll-indicator .mouse {
-            width: 24px;
-            height: 40px;
-            border: 2px solid var(--text-light);
-            border-radius: 15px;
-            position: relative;
-        }
-
-        .scroll-indicator .mouse::before {
-            content: '';
-            width: 4px;
-            height: 10px;
-            background: var(--text-light);
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-            animation: scrollDown 2s ease infinite;
-        }
-
-        @keyframes scrollDown {
-            0%, 100% { opacity: 0; transform: translateX(-50%) translateY(0); }
-            50% { opacity: 1; transform: translateX(-50%) translateY(10px); }
-        }
-
-        /* Horizontal Scroll Section */
-        .horizontal-scroll-wrapper {
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .horizontal-scroll {
-            display: flex;
-            height: 100vh;
-            will-change: transform;
-        }
-
-        .project-slide {
-            min-width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            padding: 2rem;
-        }
-
-        .project-slide::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(2px);
-        }
-
-        .project-content {
-            z-index: 2;
-            color: var(--text-light);
-            max-width: 600px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition-smooth);
-        }
-
-        .project-slide.active .project-content {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .project-content h2 {
-            font-size: clamp(2rem, 5vw, 4rem);
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .project-content .tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--accent-color);
-            color: var(--text-light);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Work Section */
-        .work-section {
+        /* Section Styles */
+        section {
             padding: 8rem 4vw;
-            background: var(--text-light);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
         }
 
         .section-title {
-            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 800;
-            margin-bottom: 4rem;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: var(--transition-smooth);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
         }
 
-        .section-title.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-warm) 100%);
         }
 
-        .work-grid {
+        .section-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            max-width: 600px;
+            margin: 2rem auto 0;
+        }
+
+        /* Featured Projects Grid */
+        .featured-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
+            gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .work-card {
-            background: var(--bg-light);
+        .project-card {
+            background: var(--bg-dark);
             border-radius: 20px;
             overflow: hidden;
-            transition: var(--transition-smooth);
-            opacity: 0;
-            transform: translateY(30px);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
         }
 
-        .work-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .work-card:hover {
+        .project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
         }
 
-        .work-card-image {
+        .project-image {
+            width: 100%;
             height: 300px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             position: relative;
             overflow: hidden;
         }
 
-        .work-card:nth-child(2) .work-card-image {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
         }
 
-        .work-card:nth-child(3) .work-card-image {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
         }
 
-        .work-card-image::before {
-            content: '';
+        .project-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.2);
-            transition: var(--transition-smooth);
+            background: linear-gradient(180deg, transparent 0%, rgba(10, 14, 39, 0.9) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+            opacity: 0;
+            transition: var(--transition);
         }
 
-        .work-card:hover .work-card-image::before {
-            background: rgba(0, 0, 0, 0);
+        .project-card:hover .project-overlay {
+            opacity: 1;
         }
 
-        .work-card-content {
+        .project-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-content {
             padding: 2rem;
         }
 
-        .work-card h3 {
+        .project-content h3 {
             font-size: 1.8rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .work-card p {
-            line-height: 1.8;
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
-        .work-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            font-size: 0.85rem;
-            color: #999;
-        }
-
-        .work-stats li {
-            list-style: none;
-        }
-
-        .work-stats strong {
-            color: var(--accent-color);
-        }
-
-        /* Creative Section */
-        .creative-section {
-            padding: 8rem 4vw;
-            background: var(--primary-color);
+            margin-bottom: 0.5rem;
             color: var(--text-light);
         }
 
-        .creative-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 4rem auto 0;
+        .project-content .company {
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
         }
 
-        .creative-item {
+        .project-content p {
+            opacity: 0.8;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .project-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .project-stats strong {
+            color: var(--accent);
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background: var(--bg-dark);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
             aspect-ratio: 1;
-            background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(255,107,53,0.3) 100%);
             border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            background: var(--primary);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .gallery-item::after {
+            content: '+';
+            position: absolute;
+            inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            transition: var(--transition-smooth);
-            cursor: pointer;
+            font-size: 3rem;
+            color: var(--accent);
             opacity: 0;
-            transform: scale(0.9);
+            transition: var(--transition);
+            background: rgba(10, 14, 39, 0.7);
         }
 
-        .creative-item.visible {
+        .gallery-item:hover::after {
             opacity: 1;
-            transform: scale(1);
         }
 
-        .creative-item:hover {
-            background: linear-gradient(135deg, rgba(255,107,53,0.3) 0%, rgba(255,107,53,0.5) 100%);
-            transform: scale(1.05) rotate(2deg);
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 2rem;
         }
 
-        /* Contact Section */
-        .contact-section {
-            padding: 8rem 4vw;
-            background: var(--text-light);
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            color: var(--primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--bg-dark) 100%);
             text-align: center;
-        }
-
-        .contact-section h2 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 800;
-            margin-bottom: 2rem;
-        }
-
-        .contact-section p {
-            font-size: 1.3rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto 3rem;
+            padding: 6rem 4vw;
         }
 
         .cta-button {
             display: inline-block;
             padding: 1.2rem 3rem;
-            background: var(--accent-color);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
             color: var(--text-light);
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
             font-size: 1.1rem;
-            transition: var(--transition-smooth);
-            border: 2px solid var(--accent-color);
+            transition: var(--transition);
+            margin-top: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .cta-button:hover {
-            background: transparent;
-            color: var(--accent-color);
             transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
         }
 
-        /* Parallax Elements */
-        .parallax-bg {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.05;
-        }
-
-        .parallax-shape {
-            position: absolute;
-            border-radius: 50%;
-            background: var(--accent-color);
+        /* Footer */
+        footer {
+            padding: 3rem 4vw;
+            text-align: center;
+            opacity: 0.5;
+            font-size: 0.9rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .cursor, .cursor-follower {
+            nav ul {
                 display: none;
             }
 
-            .work-grid, .creative-grid {
+            .featured-grid, .gallery-grid {
                 grid-template-columns: 1fr;
             }
 
-            .hero h1 {
-                font-size: 2.5rem;
+            section {
+                padding: 4rem 2rem;
             }
+
+            .cursor {
+                display: none;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <!-- Custom Cursors -->
+    <!-- Custom Cursor -->
     <div class="cursor"></div>
-    <div class="cursor-follower"></div>
 
-    <!-- Parallax Background -->
-    <div class="parallax-bg" id="parallaxBg"></div>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">GERARDO ALEMAN</div>
+        <ul>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-bg"></div>
         <div class="hero-content">
+            <p class="tagline">Aerospace Engineer × Designer</p>
             <h1>Gerardo Aleman</h1>
-            <p class="subtitle">Designer & Engineer based in South Pasadena, California</p>
-        </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="mouse"></div>
+            <p class="subtitle">Building the future through precision engineering and creative design</p>
         </div>
     </section>
 
-    <!-- Horizontal Scroll Projects -->
-    <div class="horizontal-scroll-wrapper" id="horizontalWrapper">
-        <div class="horizontal-scroll" id="horizontalScroll">
-            <div class="project-slide active" style="background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                <div class="project-content">
-                    <span class="tag">Launch</span>
-                    <h2>PEL-1</h2>
-                    <p>High resolution earth imaging platform at Planet Labs</p>
-                </div>
-            </div>
-            <div class="project-slide" style="background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                <div class="project-content">
-                    <span class="tag">Launch</span>
-                    <h2>TAN-1</h2>
-                    <p>Hyper-spectral satellite engineering</p>
-                </div>
-            </div>
-            <div class="project-slide" style="background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <div class="project-content">
-                    <span class="tag">Qualification</span>
-                    <h2>Haven-1</h2>
-                    <p>Commercial space station structural design</p>
-                </div>
-            </div>
-            <div class="project-slide" style="background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                <div class="project-content">
-                    <span class="tag">Flight</span>
-                    <h2>P-727</h2>
-                    <p>Classified airframe design at Skunk Works</p>
-                </div>
-            </div>
+    <!-- Featured Projects -->
+    <section id="work">
+        <div class="section-header">
+            <h2 class="section-title">Featured Work</h2>
+            <p class="section-subtitle">From classified aerospace programs to satellite systems, each project pushes the boundaries of what's possible</p>
         </div>
-    </div>
 
-    <!-- Work Section -->
-    <section class="work-section">
-        <h2 class="section-title">Recent Work</h2>
-        <div class="work-grid">
-            <div class="work-card">
-                <div class="work-card-image"></div>
-                <div class="work-card-content">
-                    <h3>Skunk Works</h3>
-                    <p>Airframe Design Engineer on classified P-727 project. Designed and released structural components for extreme environments using advanced materials (Inconel/Haynes230).</p>
-                    <ul class="work-stats">
-                        <li><strong>25+</strong> Parts designed (CATIA)</li>
-                        <li><strong>25+</strong> Assemblies released</li>
-                        <li><strong>5+</strong> Supplier interfaces</li>
-                    </ul>
+        <div class="featured-grid">
+            <!-- Skunk Works -->
+            <div class="project-card fade-in">
+                <div class="project-image">
+                    <span class="project-tag">Classified</span>
+                    <div style="background: linear-gradient(135deg, #0a0e27 0%, #1a2332 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent);">🛩️</div>
+                    <div class="project-overlay">
+                        <p style="color: var(--accent); font-weight: 600;">P-727 Hypersonic Program</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <p class="company">Lockheed Martin Skunk Works</p>
+                    <h3>P-727 Airframe Design</h3>
+                    <p>Airframe Design Engineer on classified hypersonic program. Designed and released structural components for extreme environments using advanced materials.</p>
+                    <div class="project-stats">
+                        <span><strong>25+</strong> Parts (CATIA)</span>
+                        <span><strong>25+</strong> Assemblies</span>
+                        <span><strong>5+</strong> Supplier Integrations</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="work-card">
-                <div class="work-card-image"></div>
-                <div class="work-card-content">
-                    <h3>Planet Labs</h3>
-                    <p>Mechanical Design Engineer for Pelican-1 & Tanager-1 satellites. Full lifecycle design from prototyping to launch-ready spacecraft assembly.</p>
-                    <ul class="work-stats">
-                        <li><strong>25+</strong> Parts designed (SOLIDWORKS)</li>
-                        <li><strong>5+</strong> FEA models (FEMAP)</li>
-                        <li><strong>2</strong> Satellites launched</li>
-                    </ul>
+            <!-- Planet Labs -->
+            <div class="project-card fade-in">
+                <div class="project-image">
+                    <span class="project-tag">Launched</span>
+                    <div style="background: linear-gradient(135deg, #0052a5 0%, #003d7a 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent);">🛰️</div>
+                    <div class="project-overlay">
+                        <p style="color: var(--accent); font-weight: 600;">Pelican-1 & Tanager-1</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <p class="company">Planet Labs</p>
+                    <h3>Satellite Design & Integration</h3>
+                    <p>Mechanical Design Engineer for next-gen Earth imaging satellites. Full lifecycle from prototyping to launch-ready spacecraft assembly.</p>
+                    <div class="project-stats">
+                        <span><strong>25+</strong> Parts (SOLIDWORKS)</span>
+                        <span><strong>5+</strong> FEA Models</span>
+                        <span><strong>2</strong> Satellites Launched</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="work-card">
-                <div class="work-card-image"></div>
-                <div class="work-card-content">
-                    <h3>Vast Space</h3>
-                    <p>Responsible engineer for COPV mounting solutions on Haven-1 commercial space station. Led structural validation and qualification testing.</p>
-                    <ul class="work-stats">
-                        <li><strong>50+</strong> Parts designed (NX)</li>
-                        <li><strong>10+</strong> FEA models (ANSYS)</li>
-                        <li><strong>2025</strong> Launch target</li>
-                    </ul>
+            <!-- Vast Space -->
+            <div class="project-card fade-in">
+                <div class="project-image">
+                    <span class="project-tag">2025 Launch</span>
+                    <div style="background: linear-gradient(135deg, #1a2332 0%, #0a0e27 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--accent);">🚀</div>
+                    <div class="project-overlay">
+                        <p style="color: var(--accent); font-weight: 600;">Haven-1 Space Station</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <p class="company">Vast Space</p>
+                    <h3>Haven-1 COPV Integration</h3>
+                    <p>Responsible engineer for pressure vessel mounting solutions on commercial space station. Led structural validation and qualification testing.</p>
+                    <div class="project-stats">
+                        <span><strong>50+</strong> Parts (NX)</span>
+                        <span><strong>10+</strong> FEA Models</span>
+                        <span><strong>4-Week</strong> Missions</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Creative Section -->
-    <section class="creative-section">
-        <h2 class="section-title">Creative Projects</h2>
-        <p style="text-align: center; font-size: 1.2rem; opacity: 0.8; max-width: 800px; margin: 0 auto 4rem;">
-            Beyond engineering, creative design projects inspire me every day—from graphic design and sculpting to woodworking, camper van conversions, music, fashion, and outdoor gear prototyping.
-        </p>
-        <div class="creative-grid">
-            <div class="creative-item">Lighting</div>
-            <div class="creative-item">BOVE</div>
-            <div class="creative-item">Wythe</div>
-            <div class="creative-item">APPARATUS</div>
-            <div class="creative-item">Adult Blonde</div>
-            <div class="creative-item">Vanlife</div>
-            <div class="creative-item">Ask a Punk</div>
-            <div class="creative-item">Custom Bike Bag</div>
-            <div class="creative-item">Custom Nightstand</div>
-            <div class="creative-item">Design Studio</div>
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section">
+        <div class="section-header">
+            <h2 class="section-title">Engineering Gallery</h2>
+            <p class="section-subtitle">A visual journey through aerospace manufacturing, precision machining, and systems integration</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Space Station<br>Docking
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    SR-72<br>Hypersonic
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Satellite<br>Integration
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Precision<br>Machining
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #333; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Solar Array<br>Assembly
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #333; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Cleanroom<br>Operations
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #333; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Material<br>Testing
+                </div>
+            </div>
+            <div class="gallery-item fade-in" onclick="openLightbox(this)">
+                <div style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #333; font-size: 0.9rem; text-align: center; padding: 1rem;">
+                    Scramjet<br>Testing
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="contact-section">
-        <h2>Let's Work Together</h2>
-        <p>We're always looking for new opportunities and are comfortable working internationally.</p>
+    <!-- CTA Section -->
+    <section id="contact" class="cta-section">
+        <h2 class="section-title">Let's Build Something Extraordinary</h2>
+        <p class="section-subtitle">Open to new opportunities and international collaborations in aerospace, design, and innovation.</p>
         <a href="mailto:hello@jjjalemanjjj.net" class="cta-button">Get In Touch</a>
     </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Gerardo Aleman. Aerospace Engineer × Designer × Maker</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <img src="" alt="" id="lightbox-img">
+    </div>
 
     <script>
         // Custom Cursor
         const cursor = document.querySelector('.cursor');
-        const cursorFollower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0;
 
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            setTimeout(() => {
-                cursorFollower.style.left = e.clientX + 'px';
-                cursorFollower.style.top = e.clientY + 'px';
-            }, 100);
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
         });
 
-        // Cursor hover effect
-        const hoverElements = document.querySelectorAll('a, button, .work-card, .creative-item, .cta-button');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        // Cursor hover effects
+        document.querySelectorAll('a, button, .project-card, .gallery-item').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
         });
 
-        // Horizontal Scroll
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.project-slide');
-        const horizontalScroll = document.getElementById('horizontalScroll');
-        const wrapper = document.getElementById('horizontalWrapper');
-
-        wrapper.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            
-            if (e.deltaY > 0 && currentSlide < slides.length - 1) {
-                currentSlide++;
-            } else if (e.deltaY < 0 && currentSlide > 0) {
-                currentSlide--;
-            }
-            
-            slides.forEach((slide, i) => {
-                slide.classList.toggle('active', i === currentSlide);
-            });
-            
-            horizontalScroll.style.transform = `translateX(-${currentSlide * 100}vw)`;
-        }, { passive: false });
-
-        // Intersection Observer for animations
+        // Scroll animations
         const observerOptions = {
-            threshold: 0.2,
+            threshold: 0.1,
             rootMargin: '0px 0px -100px 0px'
         };
 
@@ -632,47 +676,35 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.work-card, .creative-item, .section-title').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Parallax Background
-        const parallaxBg = document.getElementById('parallaxBg');
-        for (let i = 0; i < 10; i++) {
-            const shape = document.createElement('div');
-            shape.className = 'parallax-shape';
-            const size = Math.random() * 300 + 100;
-            shape.style.width = size + 'px';
-            shape.style.height = size + 'px';
-            shape.style.left = Math.random() * 100 + '%';
-            shape.style.top = Math.random() * 100 + '%';
-            parallaxBg.appendChild(shape);
+        // Lightbox
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            
+            // For demo, we'll just show a placeholder
+            // In production, you'd set img.src to the actual image
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
-        document.addEventListener('mousemove', (e) => {
-            const shapes = document.querySelectorAll('.parallax-shape');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            shapes.forEach((shape, i) => {
-                const speed = (i + 1) * 0.05;
-                shape.style.transform = `translate(${x * 50 * speed}px, ${y * 50 * speed}px)`;
-            });
-        });
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
 
-        // Smooth scroll for creative items stagger
-        const creativeItems = document.querySelectorAll('.creative-item');
-        const creativeObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
-        }, observerOptions);
-
-        creativeItems.forEach(item => creativeObserver.observe(item));
+        });
     </script>
 </body>
 </html>
